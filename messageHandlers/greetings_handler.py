@@ -8,7 +8,7 @@ class Greetings(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        channel = self.bot.get_channel(933871098485936148)
+        channel = self.bot.get_channel(934531783037423636)
         if channel is not None:
             await channel.send('Olá {0.mention}! Seja bem vindo(a) ao Grupo OpenCV Brasil!.'.format(member) +
                                '\n\nLeia as regras do grupo em #regras (Se levar ban, não diga que eu não avisei, hein!)'+
