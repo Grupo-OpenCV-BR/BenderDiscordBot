@@ -1,28 +1,24 @@
 from discord.ext import commands
-import discord
-import os
+import discord, os
 
 from messageHandlers.small_talk_handler import SmallTalkHandler
 from messageHandlers.greetings_handler import Greetings
+from messageHandlers.generate_offense import generateOffense
 
-
+last_authors = {}
 intents = discord.Intents.all()
 
-def get_prefix(bot, message):
-    """A callable Prefix for our bot. This could be edited to allow per server prefixes."""
+bender = commands.Bot(command_prefix='!!', description='A Rewrite Cog Example', intents=intents)
 
-    # Notice how you can use spaces in prefixes. Try to keep them simple though.
-    prefixes = ['>?', 'lol ', '!?']
+@bender.command()
+async def offense_me(ctx):
+    if ctx.author not in last_authors:
+        await ctx.send(generateOffense())
+        last_authors[ctx.author] = 1
+    elif ctx.author in last_authors and last_authors[ctx.author] == 1 :
+        await ctx.send("Seu degenerado! Pare de ficar spamando o server só por causa da sua síndrome de Estocolmo!")
+        last_authors[ctx.author] += 1
 
-    # Check to see if we are outside of a guild. e.g DM's etc.
-    if not message.guild:
-        # Only allow ? to be used in DMs
-        return '?'
-
-    # If we are in a guild, we allow for the user to mention us or use any of the prefixes in our list.
-    return commands.when_mentioned_or(*prefixes)(bot, message)
-
-bender = commands.Bot(command_prefix=get_prefix, description='A Rewrite Cog Example', intents=intents)
 
 @bender.event
 async def on_ready():
